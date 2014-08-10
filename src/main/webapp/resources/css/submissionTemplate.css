@@ -1,0 +1,27 @@
+#bottomMessage {
+	float: left;
+	text-align: right;
+	margin-top: 5px;
+	margin-right: 5px;
+}
+
+.navBtn1 {
+	float: right;
+}
+
+.navBtn2 {
+	float: right;
+}
+
+#bottomNav {
+	margin-top: 10px;
+}
+
+#regSaveBtn {
+	position: relative;
+	float: right;
+}
+
+.ui-panel-titlebar {
+	font-size: 1.0em;
+}

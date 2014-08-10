@@ -1,0 +1,16 @@
+target
+.settings
+.project
+.classpath
+.metadata
+*.swp
+*.swn
+*.swo
+*.DS_Store
+
+/target
+/target
+/target
+/target
+/target
+/target
