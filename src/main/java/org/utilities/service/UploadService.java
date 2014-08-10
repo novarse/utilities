@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.primefaces.event.FileUploadEvent;
-import org.utilities.manager.MainManager;
+import org.utilities.manager.UploadManager;
 import org.utilities.view.util.FacesUtils;
 
 @Named
@@ -15,7 +15,7 @@ import org.utilities.view.util.FacesUtils;
 public class UploadService implements Serializable {
 
 	@Inject
-	private MainManager mainManager;
+	private UploadManager mainManager;
 
 	public void processUpload(FileUploadEvent event) {
 		mainManager.setFile(event.getFile());

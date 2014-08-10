@@ -1,32 +1,95 @@
-<ui:composition template="./WEB-INF/templates/dataTemplate.xhtml"
+<ui:composition
+	template="./WEB-INF/templates/templateNoFormForContent.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:o="http://omnifaces.org/ui" xmlns:p="http://primefaces.org/ui">
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:p="http://primefaces.org/ui">
 
 	<ui:param name="title" value="Utils Page" />
 	<ui:define name="content">
 		<ui:decorate template="./WEB-INF/templates/innerTemplate.xhtml">
 
-			<h:panelGroup rendered="#{empty mainManager.file}">
+			<o:form enctype="multipart/form-data">
+
 				<p>
-					<p:fileUpload fileUploadListener="#{mainManager.handleUpload}"
-						mode="advanced" dragDropSupport="false" update="@form"
-						sizeLimit="1000000" allowTypes="/(\.|\/)(csv|txt)$/"
-						label="Choose File" />
+					<h:panelGroup rendered="#{empty uploadManager.file}">
+						<p:fileUpload fileUploadListener="#{uploadManager.handleUpload}"
+							mode="advanced" dragDropSupport="false" update="@form"
+							sizeLimit="1000000" allowTypes="/(\.|\/)(csv|txt)$/"
+							label="Choose File" />
+					</h:panelGroup>
+
+
+					<h:panelGroup rendered="#{not empty uploadManager.file}">
+						<h:panelGrid columns="2">
+							<h:outputText value="File: #{uploadManager.file.fileName}" />
+							<p:commandButton value="Clear"
+								action="#{uploadManager.clearUpload}" update="@form"
+								icon="ui-icon-trash" />
+						</h:panelGrid>
+					</h:panelGroup>
 				</p>
-			</h:panelGroup>
 
-			<h:panelGroup rendered="#{not empty mainManager.file}">
-				<h:panelGrid columns="2">
-					<h:outputText value="File: #{mainManager.file.fileName}" />
-					<p:commandButton value="Clear" action="#{mainManager.clearUpload}"
-						update="@form"
-						icon="ui-icon-trash" />
+			</o:form>
+
+			<o:form id="mainForm">
+
+				<hr />
+
+				<h:panelGrid columns="4" columnClasses="width210, width60">
+					<h:outputLabel value="Field Name" styleClass="bold" />
+					<h:outputLabel value="Position" styleClass="bold" />
+					<h:outputLabel />
+					<h:outputLabel />
 				</h:panelGrid>
-			</h:panelGroup>
 
+				<ui:repeat var="grp" value="#{uploadManager.fieldGrps}"
+					varStatus="status" size="#{fn:length(uploadManager.fieldGrps)}">
+
+					<h:panelGrid columns="4">
+
+						<p:inputText value="#{grp.fieldName}" id="fieldName"
+							styleClass="width200" required="true">
+							<p:ajax />
+						</p:inputText>
+
+						<p:inputText value="#{grp.position}" id="position" required="true"
+							styleClass="width60"
+							converterMessage="A positive integer is required">
+							<p:ajax />
+						</p:inputText>
+
+						<p:commandButton title="Remove details" immediate="true"
+							styleClass="width25" rendered="#{status.end gt 1}" update="@form"
+							icon="ui-icon-minus"
+							action="#{uploadManager.removeSection(status.index)}" />
+						<h:outputLabel rendered="#{status.end le 1}" />
+
+						<p:commandButton title="Add details" styleClass="width25"
+							immediate="true"
+							rendered="#{uploadManager.showAddBtn(status.index, status.end, 500)}"
+							update="@form" icon="ui-icon-plus"
+							action="#{uploadManager.addSection}" />
+						<h:outputLabel
+							rendered="#{not uploadManager.showAddBtn(status.index, status.end, 5)}" />
+
+						<p:message for="fieldName" />
+						<p:message for="position" />
+						<h:outputLabel />
+						<h:outputLabel />
+
+					</h:panelGrid>
+
+				</ui:repeat>
+
+				<p>
+					<p:commandButton value="Create Files" update="@form"/>
+				</p>
+
+			</o:form>
 		</ui:decorate>
 
 	</ui:define>
