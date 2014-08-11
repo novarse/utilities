@@ -11,6 +11,7 @@ import javax.inject.Named;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 import org.utilities.service.UploadService;
+import org.utilities.view.util.FacesUtils;
 
 @Named
 @SessionScoped
@@ -102,5 +103,15 @@ public class UploadManager implements Serializable {
 	 */
 	public boolean showAddBtn(int idx, int size, int max) {
 		return idx < max - 1 && idx == size - 1;
+	}
+
+	public void processFile() {
+		if (file == null) {
+			System.out.println("file = null");
+			FacesUtils.popupErrorMessage("A CSV file needs to be selected");
+		} else {
+
+			uploadService.processFile(file, fieldGrps);
+		}
 	}
 }

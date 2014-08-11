@@ -12,7 +12,19 @@
 	<ui:define name="content">
 		<ui:decorate template="./WEB-INF/templates/innerTemplate.xhtml">
 
+			<script type="text/javascript">
+				function clearMsgs() {
+					setTimeout(function() {
+						$('[id="#{msgs.clientId}"]').html('');
+					}, 5000);
+				}
+			</script>
+
 			<o:form enctype="multipart/form-data">
+
+				<p:messages globalOnly="true" />
+
+				<p:growl for="growl" />
 
 				<p>
 					<h:panelGroup rendered="#{empty uploadManager.file}">
@@ -36,6 +48,10 @@
 			</o:form>
 
 			<o:form id="mainForm">
+
+				<p:messages binding="#{msgs}" globalOnly="true" />
+
+				<p:growl for="growl" />
 
 				<hr />
 
@@ -85,8 +101,10 @@
 
 				</ui:repeat>
 
+
 				<p>
-					<p:commandButton value="Create Files" update="@form"/>
+					<p:commandButton value="Create Files" oncomplete="clearMsgs();"
+						update="@form" action="#{uploadManager.processFile}" />
 				</p>
 
 			</o:form>
